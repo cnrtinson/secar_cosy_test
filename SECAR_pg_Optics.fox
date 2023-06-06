@@ -46,7 +46,8 @@ VARIABLE SRDE 1;
 VARIABLE MRESOL_P1 1;
 VARIABLE MRESOL_P2 1;
 
-VARIABLE NX 1;
+{Number of rays in the respective phase space dimension}
+VARIABLE NX 1; 
 VARIABLE NA 1;
 VARIABLE NY 1;
 VARIABLE NB 1;
