@@ -65,13 +65,13 @@ VARIABLE CANONICAL_RIGIDITY 1;
 VARIABLE SC 1;
 VARIABLE MISALIGN 1;
 
-VARIABLE WF1R 1;
-VARIABLE WF2R 1;
-VARIABLE OCT1ON 1;
-VARIABLE WF1ON 1;
-VARIABLE WF2ON 1;
+VARIABLE WF1R 1; {Bending Radius in WF1}
+VARIABLE WF2R 1; {Bending Radius in WF2}
+VARIABLE OCT1ON 1; {OCT1ON 0=OFF or 1=ON}
+VARIABLE WF1ON 1; {WF1ON 0=OFF or 1=ON}
+VARIABLE WF2ON 1; {WF2ON 0=OFF or 1=ON}
 
-{Q = Quadrupoles, H = Hexapoles}
+{Q = Quadrupoles, H = Hexapoles, Q1H = Quadrupole with Hexapole}
 VARIABLE Q1  1;
 VARIABLE Q1H 1;
 VARIABLE Q2  1;
@@ -93,6 +93,7 @@ VARIABLE Q13 1;
 VARIABLE Q14 1;
 VARIABLE Q15 1; 
 
+{Scalars?}
 VARIABLE Q1_SC  1;
 VARIABLE Q2_SC  1;
 VARIABLE Q3_SC  1;
@@ -223,8 +224,9 @@ ENDPROCEDURE;
 PROCEDURE READ_RAY;
 
 VARIABLE SAVEMAP 10000 8;
-SM SAVEMAP;
-UM; CR;
+SM SAVEMAP; {Save Map}
+UM; {Unity Map} 
+CR; {Clear Rays}
 
 {N1=1 {# of rays: 3} -> -1 0 +1}                    
 {N1=2 {# of rays: 5} -> -2 -1 0 +1 +2}              
@@ -233,6 +235,7 @@ UM; CR;
 
 N1:=1; N2:=3; N3:=1; N4:=1; N5:=2;
 
+{LOOP<name><beginning><end>}
 LOOP NX 1 2*N1+1;LOOP NA 1 2*N2+1;LOOP NY 1 2*N3+1;LOOP NB 1 2*N4+1;
 LOOP NE 1 2*N5+1;
 
@@ -275,15 +278,15 @@ PROCEDURE RECOIL_BL;
 FR 3; {Fringe field flag}
 
 DL 0.799906-0.1; {z}                                       {DL1}
-PS 0.090/2;
-DL 0.1;
+PS 0.090/2; {Poincare Section}
+DL 0.1; {Drift Length}
 
 IF (MISALIGN=1);
- TA -0.0212 0.0070; {Pitch Yaw}
- RA 0.0019; {Roll}
- SA 0.000028 0.000074; {x, y}
+ TA -0.0212 0.0070; {Pitch Yaw}   {Tilt Axis}
+ RA 0.0019; {Roll}                {Rotate Axis}
+ SA 0.000028 0.000074; {x, y}     {Shift Axis}
 ENDIF;
-M5 0.250 Q1*SC Q1H*SC 0 -0.0032*(Q1/-0.40033)*SC 0 0.055;  {Q1+Hex}
+M5 0.250 Q1*SC Q1H*SC 0 -0.0032*(Q1/-0.40033)*SC 0 0.055;  {Q1+Hex}    {Magnetic Multipole}
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -303,7 +306,7 @@ IF (MISALIGN=1);
  RA 0.0038; {Roll}
  SA 0.00002 0.000005; {x, y}
 ENDIF;
-MQ 0.2979 Q2*SC 0.068;                                     {Q2}
+MQ 0.2979 Q2*SC 0.068;                                     {Q2}     {Magnetic Quadrupole}
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -323,7 +326,7 @@ IF (MISALIGN=1);
  RA 0.0058; {Roll}
  SA -0.000036 0.000112; {x, y}
 ENDIF;
-MC 1.25 22.51145 0.030 B1N B1S1 B1S2 7;                    {B1}
+MC 1.25 22.51145 0.030 B1N B1S1 B1S2 7;                    {B1}     {Magnet, Combined Function}
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -360,7 +363,7 @@ IF (MISALIGN=1);
  RA -0.0055; {Roll}
  SA 0.000011 0.00002; {x, y}
 ENDIF;
-MH 0.26 H1*SC 0.11;                                        {HEX1}
+MH 0.26 H1*SC 0.11;                                        {HEX1}     {Magnetic Hexapole}
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -518,22 +521,23 @@ DL 0.1;
 PS 0.110/2;
 DL 0.499884-0.1;                                           {DL18}
 
+{Fringe-Field Coefficients}
 {FC 1=dipole, 1/2=entrance/exit, 1/2=magn/elect, a1...a6}
-FC 1 1 1 -0.16 1.603 -0.0105 0.015 -0.0226 0.0038; {entr,magnet dipole}
-FC 1 2 1 -0.16 1.603 -0.0105 0.015 -0.0226 0.0038; {exit,magnet dipole}
+FC 1 1 1 -0.16 1.603 -0.0105 0.015 -0.0226 0.0038; {entrance, magnet dipole}
+FC 1 2 1 -0.16 1.603 -0.0105 0.015 -0.0226 0.0038; {exit, magnet dipole}
 
-FC 1 1 2 -0.167 1.874 0.246 -0.052 0.0142 0.066;{entr, elect dipole}
-FC 1 2 2 -0.167 1.874 0.246 -0.052 0.0142 0.066;{exit, elect dipole}
+FC 1 1 2 -0.167 1.874 0.246 -0.052 0.0142 0.066;{entrance, electric dipole}
+FC 1 2 2 -0.167 1.874 0.246 -0.052 0.0142 0.066;{exit, electric dipole}
 
 IF (WF1ON=1);
-CB;
+CB; {Change Bending}
 WC WF1R WF1R 2.365 0.11 NE1 NM1 4 ;                       {WF1}
 CB;
 ELSEIF 1=1;
 DL 2.365;                                                 {WF1 OFF}
 ENDIF;
-FD;
-FR 3;
+FD; {Fringe-Field Default}
+FR 3; {Fringe-Field Mode 3}
 
 DL 0.500088-0.1; {THIS IS PART OF WF1!}                    {DL19}
 PS 0.165/2;
