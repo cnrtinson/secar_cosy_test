@@ -1,3 +1,5 @@
+{proton-gamma optics}
+
 INCLUDE 'COSY';
 {INCLUDE '/Applications/COSY/COSY';}
 
@@ -5,8 +7,12 @@ PROCEDURE RUN ;
 
 {VARIABLE<name><length>}
 {VARIABLE<name><expression><expression>}
+{VARIABLE<name> 1000 8 = Declares a 1D array with 8 entries & each entry can hold a maximum of 1000 16 byte blocks}
 
 {Dipole magnets}
+{Edge angles and curvatures are chosen to match the linear and quadratic parts of the curves descried by S1 and S2}
+{S1 and S2 are 2D arrays containing the coefficients of polynomials of order n describing the shape of the edge surfaces}
+{S1 -> Entry surface & S2 -> Exit surface}
 VARIABLE B1N 1 7; {Dipole 1 B-field index}
 VARIABLE B1S1 1 7; VARIABLE B1S2 1 7; {Dipole 1 entrance-edge and exit-edge curvatures}
 VARIABLE B2S1 1 7; VARIABLE B2S2 1 7; {Dipole 2 entrance-edge and exit-edge curvatures}
@@ -17,7 +23,7 @@ VARIABLE B6S1 1 7; VARIABLE B6S2 1 7; {Dipole 6 entrance-edge and exit-edge curv
 VARIABLE B7S1 1 7; VARIABLE B7S2 1 7; {Dipole 7 entrance-edge and exit-edge curvatures}
 VARIABLE B8S1 1 7; VARIABLE B8S2 1 7; {Dipole 8 entrance-edge and exit-edge curvatures}
 
-{Wien filter higher order components}
+{Wien filter higher order components - Inhomogeneity of electric and magnetic fields?}
 VARIABLE NE1 1 4;
 VARIABLE NM1 1 4;
 
@@ -959,7 +965,7 @@ RECOIL_BL;
 
 {PG -12 -12;}
 
-{WW(1):= VMAX(RAY(1));
+WW(1):= VMAX(RAY(1));
 WW(2):= VMIN(RAY(1));
 WV:=(WW(1)-WW(2));
 CENTER := (WW(1)+WW(2))/2;
@@ -969,7 +975,7 @@ WRITE 6 'Image size ='&S(WV);
 WRITE 6 'Image Center is at'&S(CENTER);
 WRITE 6 'Resolution by max ray at FP4 ='&S(ABS(ME(1,7))/(WV));
 WRITE 6 'M11=XX, M12=XY, M16=XE, M26=YE, M17=XM =>' ME(1,1) ME(1,2) ME(1,6) ME(2,6) ME(1,7);
-WRITE 6 'M11*M22 ='&S(ME(1,1)*ME(2,2));}
+WRITE 6 'M11*M22 ='&S(ME(1,1)*ME(2,2));
 
 
 ENDPROCEDURE ;
