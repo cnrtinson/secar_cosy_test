@@ -23,8 +23,8 @@ VARIABLE NM1 1 4;
 
 VARIABLE NE2 1 4; {to accommodate E-field, WF2 feed through modif. by DF}
 
-VARIABLE WV 1; {HO half-width signal distri at FP}
-VARIABLE WW 1 2;
+VARIABLE WV 1; {HO half-width signal distri at FP / Half image size}
+VARIABLE WW 1 2; {Image size}
 VARIABLE CENTER 1; {Center of HO signal distri at FP}
 VARIABLE NMAX 1; {Maximum number of iterations}
 VARIABLE WVX 1; {1/2 horizontal image size}
@@ -43,9 +43,9 @@ VARIABLE SRYY 1;
 VARIABLE SRAY 1;
 VARIABLE SRDE 1;
 
-{Mass resolution power (at FP2 or FP3?)}
-VARIABLE MRESOL_P1 1;
-VARIABLE MRESOL_P2 1;
+{Mass resolution power}
+VARIABLE MRESOL_P1 1; {At FP3}
+VARIABLE MRESOL_P2 1; {At FP2}
 
 {Number of rays in the respective phase space dimension}
 VARIABLE NX 1; 
