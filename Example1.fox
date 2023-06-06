@@ -1,0 +1,18 @@
+INCLUDE 'COSY' ;
+PROCEDURE RUN ;
+ OV 3 2 0 ; {order 3, phase space dim 2, # of parameters 0}
+ RP 10 4 2 ; {kin. energy, mass 4 amu, charge 2}
+ UM ; {sets maps to unity}
+ DL .1; {drift length .1 m}
+ MQ .2 .1 .05; {quad, length .2 m, field 0.1 T, aperture .05 m}
+ DL .1 ;{drift length .1 m}
+ MQ .2 -.1 .05; {defoc. quad}
+ Dl .1;{drift length .1 m}
+
+ PM 6 ; {Prints Transfer Matrix on Screen}
+ PM 11 ;{Prints Transfer Matrix to file fort.11}
+
+
+ENDPROCEDURE ;
+RUN ; END ;
+
