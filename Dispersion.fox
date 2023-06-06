@@ -1,0 +1,28 @@
+INCLUDE 'COSY' ;
+PROCEDURE RUN ;
+ OV 1 3 0 ; {order 3, phase space dim 3 INCLUDING ENERGY, # of parameters 0}
+ RP 10 4 2 ; {kin. energy, mass 4 amu, charge 2}
+ UM ; {sets maps to unity}
+ 
+ SB 0 {0.03}0.2 0 0 0 0 0 {0.3}1.0 0 0 0 ;
+ ER 1 3{1} 1 1 1 3 1 1 ;
+
+ PTY 5; 
+ BP ; {begins a picture}
+ 
+ DL .1; {drift length .1 m}
+ MQ .2 {.1}1.042 .05; {quad, length .2 m, field 0.1 T, aperture .05 m}
+ DL .1 ;{drift length .1 m}
+ DP 1. 10. .05; {parallel face dipole, radius 1.0 m, angle 45 deg, aperture}
+ Dl .1;{drift length .1 m}
+ 
+ EP ; {ends a picture}
+ PG -1 -2 ; {outputs x,y picture on screen}
+
+ PM 6 ; {Prints Transfer Matrix on Screen}
+ PM 11 ;{Prints Transfer Matrix to file fort.11}
+
+
+ENDPROCEDURE ;
+RUN ; END ;
+
