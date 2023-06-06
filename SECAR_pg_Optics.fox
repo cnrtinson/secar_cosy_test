@@ -457,8 +457,8 @@ DL 0.146731-0.1;                                           {DL10}
 WW(1):= VMAX(RAY(1));
 WW(2):= VMIN(RAY(1));
 WRITE 6 'FP1Xdim'&S(WW(1)-WW(2));
-{WRITE 6 'ME(1,2) AT FP1 =' ME(1,2);
-WRITE 6 'ME(1,1) AT FP1 =' ME(1,1);}
+WRITE 6 'ME(1,2) AT FP1 =' ME(1,2);
+WRITE 6 'ME(1,1) AT FP1 =' ME(1,1);
 
 {****************************** Section 2 ******************************}
 DL 0.185 ;                                                 {DL11}
@@ -616,8 +616,8 @@ WRITE 6 'M11=XX, M12=XY, M16=XE, M26=YE, M17=XM =>' ME(1,1) ME(1,2) ME(1,6) ME(2
 
 
 PS 0.015;                                                   {FP2}
-{PRINT_XDIM;}
-{PRINT_YDIM;}
+PRINT_XDIM;
+PRINT_YDIM;
 
 {****************************** Section 3 ******************************}
 
@@ -740,15 +740,15 @@ PS 0.02;                                                  {FP3}
 WW(1):= VMAX(RAY(1));
 WW(2):= VMIN(RAY(1));
 WRITE 6 'FP3Xdim' WW(1)-WW(2);
-{WV:=(WW(1)-WW(2));   }
-{WRITE 6 'FP3Xdim' WV;}
-{MRESOL_P1 := ABS(ME(1,7))/(2*XX*ME(1,1));
+WV:=(WW(1)-WW(2));   
+WRITE 6 'FP3Xdim' WV;
+MRESOL_P1 := ABS(ME(1,7))/(2*XX*ME(1,1));
 WRITE 6 'FP3Res ='&S((ABS(ME(1,7))/(WV)));
 WRITE 6 'Mass Res.Power at FP3 ='&S(MRESOL_P1);
-WRITE 6 'M11=XX, M12=XY, M16=XE, M26=YE, M17=XM =>' ME(1,1) ME(1,2) ME(1,6) ME(2,6) ME(1,7); }
+WRITE 6 'M11=XX, M12=XY, M16=XE, M26=YE, M17=XM =>' ME(1,1) ME(1,2) ME(1,6) ME(2,6) ME(1,7); 
 
-{PRINT_XDIM;
-PRINT_YDIM;}
+PRINT_XDIM;
+PRINT_YDIM;
 
 {****************************** Section 4 ******************************}
 DL 0.25115-0.1;                                            {DL30}
@@ -814,8 +814,8 @@ WW(2):= VMIN(RAY(3));
 WVY:=(WW(1)-WW(2))*(WW(1)-WW(2));
 WRITE 6 'BeamSpotSize'&S((WVX+WVY));
 
-{PRINT_XDIM;
-PRINT_YDIM;}
+PRINT_XDIM;
+PRINT_YDIM;
 
 ENDPROCEDURE;
 
