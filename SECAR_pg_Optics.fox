@@ -827,7 +827,7 @@ ENDPROCEDURE;
 {##############################################################}
 {############## DEFINITION AND COMMAND ########################}
 {##############################################################}
-OV 4 3 2 ;
+OV 4 3 2 ; {Order 4, phase space dimension 3, parameters 2}
 
 WSET 1.5E-3; {REQUIRED TO MINIMIZE ERROR IN WF INTEGRATION}
 SETEFB; {SET THE DIPOLES EFB's and WF E- and B-FIELDS INHOMOGENEITIES}
@@ -924,13 +924,15 @@ Q15:=-0.1380*Q15_SC;
 
 {ALL THE MAGNETIC FIELD WILL BE SCALED TO THE RIGIDITY DEFINED IN THE TWO LINES BELOW}
 {DON'T TOUCH THE NEXT TWO LINES!!!}
-RP 206 66*PARA(1) 21*PARA(2) ;
+
+{RP<Kinetic energy in MeV><Mass in amu><Charge in units>}
+RP 206 66*PARA(1) 21*PARA(2); {Sets kinetic energy, mass and charge as DA (Differential Algebra) quantities}
 CANONICAL_RIGIDITY:=CONS(CHIM);
 
 {******************************************}
 {SET YOUR RECOIL HERE}
 {86Kr(alpha,n)89Sr, 2.5 MeV/u, 27+}
-{RP 203.152 89*PARA(1) 27*PARA(2) ;}
+{RP 203.152 89*PARA(1) 27*PARA(2) ;} 
 {******************************************}
 
 {DON'T TOUCH THE NEXT LINE!!!}
