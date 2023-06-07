@@ -60,13 +60,13 @@ VARIABLE NY 1;
 VARIABLE NB 1;
 VARIABLE NE 1;
 
-{?}
+{Number of rays you want to produce}
 VARIABLE N1 1;
 VARIABLE N2 1;
 VARIABLE N3 1;
 VARIABLE N4 1;
 VARIABLE N5 1;
-VARIABLE READPARA 1; {?}
+{VARIABLE READPARA 1;} {?}
 
 {To obtain the brho}
 VARIABLE CANONICAL_RIGIDITY 1;
@@ -948,15 +948,19 @@ CR {Clears all rays}; UM;
 
 N1:=1;N2:=3;N3:=1;N4:=1;N5:=2;
 
-LOOP NX 1 2*N1+1;LOOP NA 1 2*N2+1;LOOP NY 1 2*N3+1;LOOP NB 1 2*N4+1;
+LOOP NX 1 2*N1+1; {Loops the different rays, producing 2 * N1 + 1 rays for given N1 value}
+LOOP NA 1 2*N2+1;
+LOOP NY 1 2*N3+1;
+LOOP NB 1 2*N4+1;
 LOOP NE 1 2*N5+1;
 
-SRXX:= XX*(NX-(N1+1))/N1;
+SRXX:= XX*(NX-(N1+1))/N1; {Define for each ray you are defining vs XX only defined once}
 SRAX:= AX*(NA-(N2+1))/N2;
 SRYY:= YY*(NY-(N3+1))/N3;
 SRAY:= AY*(NB-(N4+1))/N4;
 SRDE:= DE*(NE-(N5+1))/N5;
 
+{Produce a range of rays and pick all of them}
 IF (((NA-(N2+1))/N2)^2+((NB-(N4+1))/N4)^2+((NE-(N5+1))/N5)^2)<1.01;
 SR SRXX SRAX SRYY SRAY 0 SRDE 0 0 1;
 ENDIF;
