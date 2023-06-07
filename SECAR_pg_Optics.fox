@@ -294,7 +294,7 @@ PROCEDURE RECOIL_BL;
 FR 3; {Fringe field flag} {FP0, Target}
 
 DL 0.799906-0.1; {z}                                       {DL1}
-PS 0.090/2; {Poincare Section = Plane of width d (0.090/2) which restricts what rays pass through the section?}
+PS 0.090/2; {Poincare Section = Plane of width d (0.090/2), corresponds to the size of the beam pipe}
 DL 0.1; {Drift Length = Distance between magnets, empty space where things can move}
 
 {Yaw = counterclockwise rotation about z-axis}
