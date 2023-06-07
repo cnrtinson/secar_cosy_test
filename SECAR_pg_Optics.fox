@@ -23,7 +23,7 @@ VARIABLE B6S1 1 7; VARIABLE B6S2 1 7; {Dipole 6 entrance-edge and exit-edge curv
 VARIABLE B7S1 1 7; VARIABLE B7S2 1 7; {Dipole 7 entrance-edge and exit-edge curvatures}
 VARIABLE B8S1 1 7; VARIABLE B8S2 1 7; {Dipole 8 entrance-edge and exit-edge curvatures}
 
-{Wien filter higher order components - Inhomogeneity of electric and magnetic fields?}
+{Wien filter higher-order (HO) components - Inhomogeneity of electric and magnetic fields?}
 VARIABLE NE1 1 4;
 VARIABLE NM1 1 4;
 
@@ -34,7 +34,7 @@ VARIABLE WW 1 2; {Image size}
 VARIABLE CENTER 1; {Center of HO signal distri at FP}
 VARIABLE NMAX 1; {Maximum number of iterations}
 VARIABLE WVX 1; {1/2 horizontal image size}
-VARIABLE WVY 1; {1/2 verticla image size}
+VARIABLE WVY 1; {1/2 vertical image size}
 
 VARIABLE XX 1; {Source size in X}
 VARIABLE AX 1; {Half-emission angle in X-Z (bending) plane}
@@ -65,13 +65,13 @@ VARIABLE N2 1;
 VARIABLE N3 1;
 VARIABLE N4 1;
 VARIABLE N5 1;
-VARIABLE READPARA 1;
+VARIABLE READPARA 1; {?}
 
 {To obtain the brho}
 VARIABLE CANONICAL_RIGIDITY 1;
 
-VARIABLE SC 1;
-VARIABLE MISALIGN 1;
+VARIABLE SC 1; {Scalar}
+VARIABLE MISALIGN 1; {Misalignment}
 
 VARIABLE WF1R 1; {Bending Radius in WF1}
 VARIABLE WF2R 1; {Bending Radius in WF2}
@@ -131,25 +131,27 @@ PROCEDURE SETEFB;
 
 {Inhomogeneity of electric fields}
 {y=0mm}
-NE1(1) := 0;
-NE1(2) := -0.01;
-NE1(3) := 0;
-NE1(4) := 11.;
+NE1(1) := 0;      {Linear}
+NE1(2) := -0.01;  {Quadratic}
+NE1(3) := 0;      {Cubic}
+NE1(4) := 11.;    {4th Order}
 
 {y=0}
-NE2(1) := 0.0019;
-NE2(2) := -0.04;
-NE2(3) := 0;
-NE2(4) := 11 ;
+NE2(1) := 0.0019; {Linear}
+NE2(2) := -0.04;  {Quadratic}
+NE2(3) := 0;      {Cubic}
+NE2(4) := 11 ;    {4th Order}
 
 {Inhomogeneity of magnetic fields}
+{Represent the smooth fitted curve (FIT) through the average of the caclulated By fields, according to the parameterization of the COSY command WC}
 {y=0mm}
-NM1(1) := 0;
-NM1(2) := 0.033;
-NM1(3) := 0;
-NM1(4) := -3.8;
+NM1(1) := 0;      {Linear}
+NM1(2) := 0.033;  {Quadratic}
+NM1(3) := 0;      {Cubic}
+NM1(4) := -3.8;   {4th Order}
 
 {Entrance-edge and exit-edge curvatures}
+{See specifications of dipole magnets - Entrance s11, s12, s13, s14 & Exit s21, s22, s23, s24}
 B1S1(1):=0.189;
 B1S1(2):=0.0115;
 B1S1(3):=0.2438;
