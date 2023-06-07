@@ -2,7 +2,7 @@ INCLUDE 'COSY';
 PROCEDURE RUN ;
 OV 5 2 3 ; {order 5, phase space dim 2, parameters 3}
 RP 10*PARA(1) 4*PARA(2) 2*PARA(3) ; {sets kinetic energy, mass and charge as DA quantities}
-WRITE 6 'Para(1), Para(2): ' PARA(1), PARA(2);
+WRITE 6 'Para(1), Para(2): ' PARA(1) PARA(2);
 UM ;
 DL .1 ;
 MQ .2 .1 .05 ;
