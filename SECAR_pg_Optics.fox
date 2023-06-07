@@ -102,7 +102,7 @@ VARIABLE Q13 1;
 VARIABLE Q14 1;
 VARIABLE Q15 1; 
 
-{Scalars}
+{Scalars - Correspond to magnet strengths}
 VARIABLE Q1_SC  1;
 VARIABLE Q2_SC  1;
 VARIABLE Q3_SC  1;
