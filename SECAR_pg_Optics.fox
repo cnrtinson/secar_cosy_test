@@ -273,7 +273,7 @@ PROCEDURE PRINT_XDIM;
 
 WW(1):= VMAX(RAY(1));
 WW(2):= VMIN(RAY(1));
-WRITE 6 'Xdim' WW(1)-WW(2);
+WRITE 6 'Xdim' WW(1)-WW(2); {Beam width in x-direction}
 
 ENDPROCEDURE;
 
@@ -281,7 +281,7 @@ PROCEDURE PRINT_YDIM;
 
 WW(1):= VMAX(RAY(3));
 WW(2):= VMIN(RAY(3));
-WRITE 6 'Ydim' WW(1)-WW(2);
+WRITE 6 'Ydim' WW(1)-WW(2); {Beam width in y-direction}
 
 ENDPROCEDURE;
 
@@ -294,12 +294,13 @@ PROCEDURE RECOIL_BL;
 FR 3; {Fringe field flag} {FP0, Target}
 
 DL 0.799906-0.1; {z}                                       {DL1}
-PS 0.090/2; {Poincare Section}
-DL 0.1; {Drift Length}
+PS 0.090/2; {Poincare Section = Plane of width d (0.090/2) which restricts what rays pass through the section?}
+DL 0.1; {Drift Length = Distance between magnets, empty space where things can move}
 
 {Yaw = counterclockwise rotation about z-axis}
 {Pitch = counterclockwsie rotation about y-axis}
 {Roll = counterclockwise rotation about x-axis}
+{To "align" magnets in SECAR system with COSY's axes}
 
 IF (MISALIGN=1);
  TA -0.0212 0.0070; {Pitch Yaw}   {Tilt Axis}
@@ -456,7 +457,7 @@ DL 0.1;
 PS 0.102/2;
 DL 0.146731-0.1;                                           {DL10}  
 
-  PS 0.02;                                                 {FP1}
+  PS 0.02;                                                 {FP1} {Size of FP1 or range of acceptance for good resolution?}
 
 WW(1):= VMAX(RAY(1));
 WW(2):= VMIN(RAY(1));
@@ -799,15 +800,15 @@ PRINT_XDIM;
 PRINT_YDIM;
 DL 0.1;                                                    {DL36}
 PS 0.101/2;
-DL 0.7112-0.1;                                             {Dist to UMCP} {71.12 cm} {from the coils of Q15 to umcp} {DL37}
-PS (0.075/1.41)/2;                                         {0.075 mm horiz., tilted 45 deg for vert direction}
+DL 0.7112-0.1;                                             {Dist from coils to UMCP} {71.12 cm} {from the coils of Q15 to umcp} {DL37}
+PS (0.075/1.41)/2;                                         {0.075 mm horiz., tilted 45 deg for vert direction} {0.0265957447}
 PRINT_XDIM;
 PRINT_YDIM;
-DL 2.1082;                                                 {From UMCP to viewer} {DL38}
+DL 2.1082;                                                 {From UMCP (Upstream MicroChannel Plate) to viewer} {DL38} {2.8194 - 0.7112 - 1.3945}
 PS (0.035);                                                {Viewer FP4}
 PRINT_XDIM;
 PRINT_YDIM;
-DL 0.3302;                                                 {From viewer to DSSD} {DL39}
+DL 0.3302;                                                 {From viewer to DSSD} {DL39} {3.1496 - 2.8194}
 PS (0.064)/2;                                              {DSSD - Double-Sided Silicon Strip Detectors}
 
 WW(1):= VMAX(RAY(1));
