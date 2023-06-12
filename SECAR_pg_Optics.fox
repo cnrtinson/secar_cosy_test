@@ -27,14 +27,14 @@ VARIABLE B8S1 1 7; VARIABLE B8S2 1 7; {Dipole 8 entrance-edge and exit-edge curv
 VARIABLE NE1 1 4;
 VARIABLE NM1 1 4;
 
-VARIABLE NE2 1 4; {to accommodate E-field, WF2 feed through modif. by DF}
+VARIABLE NE2 1 4; {To accommodate E-field, WF2 feed through modif. by DF}
 
-VARIABLE WV 1; {HO half-width signal distri at FP / Half image size}
+VARIABLE WV 1;   {HO half-width signal distri at FP / Half image size}
 VARIABLE WW 1 2; {Image size}
 VARIABLE CENTER 1; {Center of HO signal distri at FP}
-VARIABLE NMAX 1; {Maximum number of iterations}
-VARIABLE WVX 1; {1/2 horizontal image size}
-VARIABLE WVY 1; {1/2 vertical image size}
+VARIABLE NMAX 1;   {Maximum number of iterations}
+VARIABLE WVX 1;    {1/2 horizontal image size}
+VARIABLE WVY 1;    {1/2 vertical image size}
 
 VARIABLE XX 1; {Source size in X}
 VARIABLE AX 1; {Half-emission angle in X-Z (bending) plane}
@@ -102,7 +102,7 @@ VARIABLE Q13 1;
 VARIABLE Q14 1;
 VARIABLE Q15 1; 
 
-{Scalars - Correspond to magnet strengths}
+{Scalars}
 VARIABLE Q1_SC  1;
 VARIABLE Q2_SC  1;
 VARIABLE Q3_SC  1;
@@ -142,7 +142,7 @@ NE1(4) := 11.;    {4th Order}
 NE2(1) := 0.0019; {Linear}
 NE2(2) := -0.04;  {Quadratic}
 NE2(3) := 0;      {Cubic}
-NE2(4) := 11 ;    {4th Order}
+NE2(4) := 11;     {4th Order}
 
 {Inhomogeneity of magnetic fields}
 {Represent the smooth fitted curve (FIT) through the average of the caclulated By fields, according to the parameterization of the COSY command WC}
@@ -153,7 +153,7 @@ NM1(3) := 0;      {Cubic}
 NM1(4) := -3.8;   {4th Order}
 
 {Entrance-edge and exit-edge curvatures}
-{See specifications of dipole magnets - Entrance s11, s12, s13, s14 & Exit s21, s22, s23, s24}
+{See specifications of dipole magnets (G. Berg, Sept. 2018, JIOSS) - Entrance s11, s12, s13, s14 & Exit s21, s22, s23, s24}
 B1S1(1):=0.189;
 B1S1(2):=0.0115;
 B1S1(3):=0.2438;
@@ -249,10 +249,13 @@ CR; {Clear Rays}
 {N1=3 {# of rays: 7} -> -3 -2 -1 0 +1 +2 +3}        
 {N1=4 {# of rays: 9} -> -4 -3 -2 -1 0 +1 +2 +3 +4}  
 
-N1:=1; N2:=3; N3:=1; N4:=1; N5:=2;
+N1:=2; N2:=3; N3:=2; N4:=1; N5:=2;
 
 {LOOP<name><beginning><end>}
-LOOP NX 1 2*N1+1;LOOP NA 1 2*N2+1;LOOP NY 1 2*N3+1;LOOP NB 1 2*N4+1;
+LOOP NX 1 2*N1+1;
+LOOP NA 1 2*N2+1;
+LOOP NY 1 2*N3+1;
+LOOP NB 1 2*N4+1;
 LOOP NE 1 2*N5+1;
 
 SRXX:= XX*(NX-(N1+1))/N1;
@@ -289,12 +292,18 @@ ENDPROCEDURE;
 
 PROCEDURE RECOIL_BL;
 
-{****************************** Section 1 ******************************}
+{******* Design Parameters in SECAR Pre-Conceptual Design Report (1 October 2014) *******}
+{Table 3.3: Optimized locations and lengths of various SECAR elements (e.g., DL elements)}
+{Table 3.6: Dipole design parameters, Table 3.7: Quadrupole design parameters, Table 3.8: Hexapole magnet properties, Table 3.9: Octupole magnet properties}
+{Table 3.10: Specifications of SECAR Velocity Filters}
 
+{****************************** Section 1 ******************************}
 FR 3; {Fringe field flag} {FP0, Target}
+{FR 3 forces the reference trajectory to travel perpendicularly through the transversal/radial axis in the middle of the element}
+{If the bending element is mirror symmetric along this middle line, the map of the element will reflect this symmetry}
 
 DL 0.799906-0.1; {z}                                       {DL1}
-PS 0.090/2; {Poincare Section = Plane of width d (0.090/2), corresponds to the size of the beam pipe}
+PS 0.090/2; {Poincare Section = Plane of width d (0.090/2) which restricts what rays pass through the section?}
 DL 0.1; {Drift Length = Distance between magnets, empty space where things can move}
 
 {Yaw = counterclockwise rotation about z-axis}
@@ -307,7 +316,11 @@ IF (MISALIGN=1);
  RA 0.0019; {Roll}                {Rotate Axis}
  SA 0.000028 0.000074; {x, y}     {Shift Axis}
 ENDIF;
+
 M5 0.250 Q1*SC Q1H*SC 0 -0.0032*(Q1/-0.40033)*SC 0 0.055;  {Q1+Hex}    {Magnetic Multipole}
+{M5<length><BQ><BH><BO><BD><BZ><aperture> - Superimposed magnetic multipole with arbitrary order multipoles}
+{Q = Quadrupole, H = Sextupole, O = Octupole, D = decapole, Z = Duodecapole}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -327,7 +340,10 @@ IF (MISALIGN=1);
  RA 0.0038; {Roll}
  SA 0.00002 0.000005; {x, y}
 ENDIF;
+
 MQ 0.2979 Q2*SC 0.068;                                     {Q2}     {Magnetic Quadrupole}
+{MQ<length><flux density at pole tip><aperture>}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -347,7 +363,12 @@ IF (MISALIGN=1);
  RA 0.0058; {Roll}
  SA -0.000036 0.000112; {x, y}
 ENDIF;
+
 MC 1.25 22.51145 0.030 B1N B1S1 B1S2 7;                    {B1}     {Magnet, Combined Function}
+{MC<radius><angle><aperture><N><S1><S2><n>}
+{N = Array containing indices n_i describing the midplane radial field dependence}
+{S1 and S2 = Arrays containing the n coefficients s1,...,sn of two nth order polynomials describing the shape of the entrance and exit edges}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -365,7 +386,12 @@ IF (MISALIGN=1);
  RA 0.0012; {Roll}
  SA -0.000007 0.000147; {x, y}
 ENDIF;
+
 MC 1.25 22.5121 0.030 B1N B2S1 B2S2 7;                     {B2}
+{MC<radius><angle><aperture><N><S1><S2><n>}
+{N = Array containing indices n_i describing the midplane radial field dependence}
+{S1 and S2 = Arrays containing the n coefficients s1,...,sn of two nth order polynomials describing the shape of the entrance and exit edges}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -384,7 +410,10 @@ IF (MISALIGN=1);
  RA -0.0055; {Roll}
  SA 0.000011 0.00002; {x, y}
 ENDIF;
+
 MH 0.26 H1*SC 0.11;                                        {HEX1}     {Magnetic Hexapole}
+{MH<length><flux density at pole tip><aperture>}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -404,7 +433,10 @@ IF (MISALIGN=1);
  RA 0.0037; {Roll}
  SA 0.000003 -0.000002; {x, y}
 ENDIF;
+
 MQ 0.3499 Q3*SC 0.11;                                      {Q3}
+{MQ<length><flux density at pole tip><aperture>}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -424,7 +456,11 @@ IF (MISALIGN=1);
  RA 0.0054; {Roll}
  SA -0.000047 -0.000002; {x, y}
 ENDIF;
+
 M5 0.3467 Q4*SC 0 0 0 0 0.08;                              {Q4}
+{M5<length><BQ><BH><BO><BD><BZ><aperture> - Superimposed magnetic multipole with arbitrary order multipoles}
+{Q = Quadrupole, H = Sextupole, O = Octupole, D = decapole, Z = Duodecapole}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -444,7 +480,10 @@ IF (MISALIGN=1);
  RA 0.0223; {Roll}
  SA -0.000012 -0.000005; {x, y}
 ENDIF;
+
 MQ 0.3466 Q5*SC 0.06;                                      {Q5}
+{MQ<length><flux density at pole tip><aperture>}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -470,13 +509,23 @@ DL 0.185 ;                                                 {DL11}
 DL 0.16965-0.1;                                            {DL12} 
 PS 0.156/2;
 DL 0.1;
+
 MC 1.25 22.5321 0.05 B1N B3S1 B3S2 7;                      {B3}
+{MC<radius><angle><aperture><N><S1><S2><n>}
+{N = Array containing indices n_i describing the midplane radial field dependence}
+{S1 and S2 = Arrays containing the n coefficients s1,...,sn of two nth order polynomials describing the shape of the entrance and exit edges}
+
 PRINT_XDIM;
 PRINT_YDIM;
 DL 0.50685-0.1;                                            {DL13}
 PS 0.156/2;
 DL 0.1;
+
 MC 1.25 22.5807 0.05 B1N B4S1 B4S2 7;                      {B4}
+{MC<radius><angle><aperture><N><S1><S2><n>}
+{N = Array containing indices n_i describing the midplane radial field dependence}
+{S1 and S2 = Arrays containing the n coefficients s1,...,sn of two nth order polynomials describing the shape of the entrance and exit edges}
+
 PRINT_XDIM;
 PRINT_YDIM;
 DL 0.299023-0.1;                                           {DL14}
@@ -488,7 +537,11 @@ IF (MISALIGN=1);
  RA -0.0121; {Roll}
  SA -0.000028 -0.000023; {x, y}
 ENDIF;
+
 M5 0.26 0 H2*SC 0 0 0 0.12;                                {HEX2}
+{M5<length><BQ><BH><BO><BD><BZ><aperture> - Superimposed magnetic multipole with arbitrary order multipoles}
+{Q = Quadrupole, H = Sextupole, O = Octupole, D = decapole, Z = Duodecapole}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -509,7 +562,10 @@ IF (MISALIGN=1);
  RA 0.0016; {Roll}
  SA -0.000035 0.000012; {x, y}
 ENDIF;
+
 MQ 0.3398 Q6*SC 0.14;                                      {Q6}
+{MQ<length><flux density at pole tip><aperture>}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1); 
@@ -529,7 +585,10 @@ IF (MISALIGN=1);
  RA 0.0039; {Roll}
  SA -0.000028 0.00005; {x, y}
 ENDIF;
+
 MQ 0.3401 Q7*SC 0.13 ;                                     {Q7}
+{MQ<length><flux density at pole tip><aperture>}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);  
@@ -543,7 +602,12 @@ PS 0.110/2;
 DL 0.499884-0.1;                                           {DL18}
 
 {Fringe-Field Coefficients}
-{FC 1=dipole, 1/2=entrance/exit, 1/2=magn/elect, a1...a6}
+{FC<IMP<IEE><IEM><a1><a2><a3><a4><a5><a6>}
+{IMP = Multipole order (1 = Dipole, 2 = Quadrupole, ...)}
+{IEE = Identifies data belonging to 1 = entrance & 2 = exit fringe fields}
+{IEM = Electronmagnetic elements (1 = Magnetic, 2 = Electric)}
+{a1,...,a6 = Enge coefficients (influence the fall-off in the z-direction, Dipole Enge-type decay [1 + exp[a1 + a2*(z/D) + ... + a6*(z/D)^5]^-1)}
+ 
 FC 1 1 1 -0.16 1.603 -0.0105 0.015 -0.0226 0.0038; {entrance, magnet dipole}
 FC 1 2 1 -0.16 1.603 -0.0105 0.015 -0.0226 0.0038; {exit, magnet dipole}
 
@@ -551,14 +615,20 @@ FC 1 1 2 -0.167 1.874 0.246 -0.052 0.0142 0.066;{entrance, electric dipole}
 FC 1 2 2 -0.167 1.874 0.246 -0.052 0.0142 0.066;{exit, electric dipole}
 
 IF (WF1ON=1);
-CB; {Change Bending}
+CB; {Change Bending - Bending direction is counterclockwise}
+
 WC WF1R WF1R 2.365 0.11 NE1 NM1 4 ;                       {WF1}
-CB;
+{WC<Electric field radius><Mangetic field radius><length><aperture><NE><NM><n>}
+{2.365 - Dipole magnet effective field length}
+{0.11 - Horizontal Good-field Region (GFR)}
+{NE and NM describe the inhomogeneity of the electric and magnetic fields respectively via F(x) = F_0 * [1 + sum{N_(i) * x^i, i = 1 to n}]}
+
+CB; {Change Bending - Bending direction is clockwise}
 ELSEIF 1=1;
 DL 2.365;                                                 {WF1 OFF}
 ENDIF;
-FD; {Fringe-Field Default}
-FR 3; {Fringe-Field Mode 3}
+FD; {Fringe-Field Default - Resets Enge coefficients to default value, in case they have been changed}
+FR 3; {Fringe-Field Mode 3 - All fringe fields are disregarded & a sharp cutoff approximation is used for all elements}
 
 DL 0.500088-0.1; {THIS IS PART OF WF1!}                    {DL19}
 PS 0.165/2;
@@ -569,7 +639,11 @@ IF (MISALIGN=1);
  RA 0.0001; {Roll}
  SA 0.000028 0.000003; {x, y}
 ENDIF;
+
 M5 0.26 0 H3*SC 0 0 0 0.09;                                {HEX3}
+{M5<length><BQ><BH><BO><BD><BZ><aperture> - Superimposed magnetic multipole with arbitrary order multipoles}
+{Q = Quadrupole, H = Sextupole, O = Octupole, D = decapole, Z = Duodecapole}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);  
@@ -590,7 +664,11 @@ IF (MISALIGN=1);
  RA 0.0057; {Roll}
  SA 0.000045 -0.000034; {x, y}
 ENDIF;
+
 M5 0.26 0 0 O1*SC 0 0 0.09;                                {OCT1}
+{M5<length><BQ><BH><BO><BD><BZ><aperture> - Superimposed magnetic multipole with arbitrary order multipoles}
+{Q = Quadrupole, H = Sextupole, O = Octupole, D = decapole, Z = Duodecapole}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);  
@@ -636,6 +714,9 @@ IF (MISALIGN=1);
  SA -0.000046 0.000022; {x, y}
 ENDIF;
 M5 0.25 Q8*SC 0 -9.88E-5*(Q8/-0.14859)*SC 0 0 0.05;        {Q8_oct}
+{M5<length><BQ><BH><BO><BD><BZ><aperture> - Superimposed magnetic multipole with arbitrary order multipoles}
+{Q = Quadrupole, H = Sextupole, O = Octupole, D = decapole, Z = Duodecapole}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);  
@@ -656,6 +737,9 @@ IF (MISALIGN=1);
  SA 0.000037 0.00005; {x, y}
 ENDIF;
 M5 0.30 Q9*SC 0 0.00015*(Q9/0.2855)*SC 0 0 0.07;           {Q9_oct}
+{M5<length><BQ><BH><BO><BD><BZ><aperture> - Superimposed magnetic multipole with arbitrary order multipoles}
+{Q = Quadrupole, H = Sextupole, O = Octupole, D = decapole, Z = Duodecapole}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);  
@@ -670,13 +754,21 @@ DL 0.360023-0.2;                                           {DL24}
 PS 0.148/2;
 DL 0.1;
 
-MC 1.25 42.5 0.036 B1N B5S1 B5S2 7;                        {B5} 
+MC 1.25 42.5 0.036 B1N B5S1 B5S2 7;                        {B5}
+{MC<radius><angle><aperture><N><S1><S2><n>}
+{N = Array containing indices n_i describing the midplane radial field dependence}
+{S1 and S2 = Arrays containing the n coefficients s1,...,sn of two nth order polynomials describing the shape of the entrance and exit edges}
+ 
 PRINT_XDIM;
 PRINT_YDIM;
 DL 0.35-0.1;                                               {DL25}
 PS 0.148/2;
 DL 0.1;
 MC 1.25 42.5 0.036 B1N B6S1 B6S2 7;                        {B6}
+{MC<radius><angle><aperture><N><S1><S2><n>}
+{N = Array containing indices n_i describing the midplane radial field dependence}
+{S1 and S2 = Arrays containing the n coefficients s1,...,sn of two nth order polynomials describing the shape of the entrance and exit edges}
+
 PRINT_XDIM;
 PRINT_YDIM;
 
@@ -690,6 +782,9 @@ IF (MISALIGN=1);
  SA -0.000026 0.000011; {x, y}
 ENDIF;
 M5 0.26 Q10*SC 0 5.154e-5*(-0.0335/Q10)*SC 0 0 0.09;       {Q10_oct}
+{M5<length><BQ><BH><BO><BD><BZ><aperture> - Superimposed magnetic multipole with arbitrary order multipoles}
+{Q = Quadrupole, H = Sextupole, O = Octupole, D = decapole, Z = Duodecapole}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);
@@ -710,6 +805,9 @@ IF (MISALIGN=1);
  SA -0.000023 0.000011; {x, y}
 ENDIF;
 M5 0.34 Q11*SC 0 0.000115625*(0.149432825/Q11)*SC 0 0 0.12;    {Q11_oct}
+{M5<length><BQ><BH><BO><BD><BZ><aperture> - Superimposed magnetic multipole with arbitrary order multipoles}
+{Q = Quadrupole, H = Sextupole, O = Octupole, D = decapole, Z = Duodecapole}
+
 PRINT_XDIM;
 PRINT_YDIM;
 IF (MISALIGN=1);  
@@ -729,9 +827,9 @@ FC 1 1 2  -0.124 1.98 0.186 -0.069 0.01 0.053; {entrance, electric dipole}
 FC 1 1 2  -0.124 1.98 0.186 -0.069 0.01 0.053; {exit, elect dipole}
 
 IF (WF2ON=1);
-CB;
+CB; {Change Bending - Bending direction is counterclockwise}
 WC WF2R WF2R 2.365  0.11 NE2 NM1 4 ;                       {WF2}
-CB;
+CB; {Change Bending - Bending direction is clockwise}
 ELSEIF 1=1;
 DL 2.365;                                                  {WF2 OFF}
 ENDIF;
@@ -760,6 +858,8 @@ DL 0.25115-0.1;                                            {DL30}
 PS 0.167/2;
 DL 0.1;
 MQ 0.2977 Q12*SC 0.07;                                     {Q12}
+{MQ<length><flux density at pole tip><aperture>}
+
 PRINT_XDIM;
 PRINT_YDIM;
 DL 0.1;
@@ -768,6 +868,8 @@ DL 0.35075-0.2;                                            {DL31}
 PS 0.121/2;
 DL 0.1;
 MQ 0.3008 Q13*SC 0.05;                                     {Q13}
+{MQ<length><flux density at pole tip><aperture>}
+
 PRINT_XDIM;
 PRINT_YDIM;
 DL 0.1;
@@ -775,19 +877,29 @@ PS 0.101/2;
 DL 0.6596-0.2;                                             {DL32}
 PS 0.130/2;
 DL 0.1;
-MC 1.25 55. 0.03 B1N B7S1 B7S2 4;                          {B7}   
+MC 1.25 55. 0.03 B1N B7S1 B7S2 4;                          {B7}
+{MC<radius><angle><aperture><N><S1><S2><n>}
+{N = Array containing indices n_i describing the midplane radial field dependence}
+{S1 and S2 = Arrays containing the n coefficients s1,...,sn of two nth order polynomials describing the shape of the entrance and exit edges}
+   
 PRINT_XDIM;
 PRINT_YDIM;
 DL 0.68-0.1;                                               {DL33} 
 PS 0.130/2;
 DL 0.1;
-MC 1.25 55. 0.03 B1N B8S1 B8S2 4;                          {B8} 
+MC 1.25 55. 0.03 B1N B8S1 B8S2 4;                          {B8}
+{MC<radius><angle><aperture><N><S1><S2><n>}
+{N = Array containing indices n_i describing the midplane radial field dependence}
+{S1 and S2 = Arrays containing the n coefficients s1,...,sn of two nth order polynomials describing the shape of the entrance and exit edges}
+ 
 PRINT_XDIM;
 PRINT_YDIM;
 DL 0.86025-0.1;                                            {DL34}
 PS 0.121/2;
 DL 0.1;
 MQ 0.2995 Q14*SC 0.05;                                     {Q14}
+{MQ<length><flux density at pole tip><aperture>}
+
 PRINT_XDIM;
 PRINT_YDIM;
 DL 0.1;
@@ -796,11 +908,13 @@ DL 0.44965-0.2;                                            {DL35}
 PS 0.121/2;
 DL 0.1;
 MQ 0.3012 Q15*SC 0.05;                                     {Q15}
+{MQ<length><flux density at pole tip><aperture>}
+
 PRINT_XDIM;
 PRINT_YDIM;
 DL 0.1;                                                    {DL36}
 PS 0.101/2;
-DL 0.7112-0.1;                                             {Dist from coils to UMCP} {71.12 cm} {from the coils of Q15 to umcp} {DL37}
+DL 0.7112-0.1;                                             {Dist from coils to UMCP} {71.12 cm} {from the coils of Q15 to UMCP} {DL37}
 PS (0.075/1.41)/2;                                         {0.075 mm horiz., tilted 45 deg for vert direction} {0.0265957447}
 PRINT_XDIM;
 PRINT_YDIM;
@@ -841,9 +955,9 @@ AY:=0.025;
 DE:= 0.031;
 {******************************************}
 
-NMAX:=189;
+NMAX:=189; {Number of characteristic rays}
 
-{SET MAGNETS}
+{SET MAGNETS - Ratios of rigidities}
 Q1_SC:= 1.0;
 Q2_SC:= 1.0;
 Q3_SC:= 1.0;
@@ -870,8 +984,9 @@ WF2R:=7.; {define the bending radius in WF2 -- not important here because it is 
 WF1ON:=1; {WF2ON 0=OFF or 1=ON - CURRENTLY WF2 IS OFF}
 WF2ON:=1; {WF2ON 0=OFF or 1=ON - CURRENTLY WF2 IS OFF}
 MISALIGN:=1; {ACCOUNT =1 or not =0 for the measured misalignment}
-OCT1ON:=1; {is octupole 1 ON=1 or OFF=0}
+OCT1ON:=1; {Is octupole 1 ON=1 or OFF=0}
 
+{*****(a,n) optics*****}
 {Q1:=-0.40033*Q1_SC;
 Q1H:=0.003703;
 Q2:=0.219852*Q2_SC;
@@ -927,19 +1042,31 @@ Q15:=-0.1380*Q15_SC;
 
 {RP<Kinetic energy in MeV><Mass in amu><Charge in units>}
 RP 206 66*PARA(1) 21*PARA(2); {Sets kinetic energy, mass and charge as DA (Differential Algebra) quantities}
-CANONICAL_RIGIDITY:=CONS(CHIM);
+{Every time the procedure RP is called, the second set of varaibles describing the reference particle are updated:} 
+	{E0 = Energy in MeV}
+	{M0 = Mass in AMU}
+	{Z0 = Charge in units}
+	{V0 = Velocity in m/s}
+	{P0 = Momentum p0*c in MeV}
+	{CHIM = Magnetic Rigidity}
+	{CHIE = Electric Rigidity}
+	{ETA = Kinetic Energy / mc^2}
+{WRITE 6 'PARA(1), PARA(2): ' PARA(1) PARA(2);}
+
+CANONICAL_RIGIDITY:=CONS(CHIM); 
 
 {******************************************}
 {SET YOUR RECOIL HERE}
 {86Kr(alpha,n)89Sr, 2.5 MeV/u, 27+}
-{RP 203.152 89*PARA(1) 27*PARA(2) ;} 
+{RP 203.152 89*PARA(1) 27*PARA(2) ;}  
 {******************************************}
 
 {DON'T TOUCH THE NEXT LINE!!!}
-SC:=CONS(CHIM)/CANONICAL_RIGIDITY;
+SC:=CONS(CHIM)/CANONICAL_RIGIDITY; {CHIM = Magnetic Rigidity of the isotope last set with the RP command}
+{Ratio of rigidities between recoils of interest (see SET YOUR RECOIL HERE) and 66Se}
 
 UM;
-CR {Clears all rays}; UM;
+CR {Clears all rays}; UM {Unity Map};
 
 {N1=1 {# of rays: 3} -> -1 0 +1}                    
 {N1=2 {# of rays: 5} -> -2 -1 0 +1 +2}              
@@ -962,7 +1089,7 @@ SRDE:= DE*(NE-(N5+1))/N5;
 
 {Produce a range of rays and pick all of them}
 IF (((NA-(N2+1))/N2)^2+((NB-(N4+1))/N4)^2+((NE-(N5+1))/N5)^2)<1.01;
-SR SRXX SRAX SRYY SRAY 0 SRDE 0 0 1;
+SR SRXX SRAX SRYY SRAY 0 SRDE 0 0 2;
 ENDIF;
 ENDLOOP;ENDLOOP;ENDLOOP;ENDLOOP;ENDLOOP;
 
@@ -975,6 +1102,8 @@ ENDLOOP;ENDLOOP;ENDLOOP;ENDLOOP;ENDLOOP;
 {SR 0 0 0 0 0 0 0 0 3; {89Sr30+ at 203.152 MeV}}
 {SR 0 0 0 0 0 -0.026265 0 0 3; {89Sr30+ at 197.816 MeV}}
 {SR 0 0 0 0 0 0.058320863 -0.033707865 0 2; {86Kr30+ at 215 MeV}}
+
+SR 0 0 0 0 0 ((3.22121 - 3.12387) / 3.12387) ((64.9381 - 65.94376) / 65.94376) 0 3; {65Se21+ at 209.17936 MeV}
 
 BP;
 RECOIL_BL;
